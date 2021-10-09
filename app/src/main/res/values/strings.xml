@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Fanintek Mobile</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="login">Login</string>
+    <string name="login_description">Silahkan login menggunakan akun yang terdaftar</string>
+    <string name="name">Nama</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="password_confirmation">Konfirmasi Password</string>
+    <string name="doesnt_have_account">Belum punya akun? Register disini</string>
+    <string name="register">Register</string>
+    <string name="register_description">Silahkan melengkapi data-data berikut untuk melanjutkan proses registrasi.</string>
+    <string name="i_have_account">Sudah memiliki akun? Login disini</string>
+    <string name="forgot_password">Lupa Password</string>
+    <string name="forgot_password_description">Silahkan mengisi alamat email yang terdaftar untuk mendapatkan link reset password</string>
+    <string name="back_to_login">Kembali ke login</string>
+    <string name="forgot_password_question">Lupa Password?</string>
+    <string name="user_list">Daftar Pengguna</string>
+</resources>
