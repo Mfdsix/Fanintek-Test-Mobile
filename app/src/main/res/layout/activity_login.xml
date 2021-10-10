@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="@dimen/fifteen"
-    android:paddingVertical="@dimen/fifteen"
-    android:orientation="vertical"
     tools:context=".activities.LoginActivity">
+
+    <ScrollView
+        android:id="@+id/wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/fifteen"
+        android:paddingVertical="@dimen/fifteen"
+        android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/TitleText"
         android:text="@string/login"/>
     <TextView
         android:layout_width="match_parent"
@@ -28,6 +38,7 @@
             android:text="@string/email"/>
         <EditText
             android:id="@+id/edtEmail"
+            style="@style/BorderedInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"/>
@@ -44,6 +55,7 @@
             android:text="@string/password"/>
         <EditText
             android:id="@+id/edtPassword"
+            style="@style/BorderedInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"/>
@@ -54,19 +66,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="textEnd"
+        android:layout_marginTop="@dimen/five"
         android:text="@string/forgot_password_question"/>
 
     <Button
         android:id="@+id/btnLogin"
+        android:layout_marginTop="@dimen/fifteen"
+        style="@style/PrimaryButton"
         android:layout_width="match_parent"
         android:text="@string/login"
         android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/txtRegister"
+        android:layout_marginTop="@dimen/five"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="@string/doesnt_have_account"/>
 
-</LinearLayout>
+    </LinearLayout>
+
+    </ScrollView>
+
+    <include
+        android:id="@+id/loading"
+        android:visibility="gone"
+        layout="@layout/include_loading"/>
+</FrameLayout>
