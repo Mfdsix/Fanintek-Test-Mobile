@@ -1,18 +1,19 @@
 package com.zgenit.fanintek.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.view.View
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.zgenit.fanintek.R
 import com.zgenit.fanintek.utils.Extensions.toast
-import com.zgenit.fanintek.utils.FirebaseHelper.firebaseAuth
 import com.zgenit.fanintek.utils.RegexHelper
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
+    private lateinit var wrapper: ScrollView
+    private lateinit var loading: RelativeLayout
     private lateinit var edtEmail: EditText
     private lateinit var btnForgotPassword: Button
     private lateinit var txtLogin: TextView
@@ -21,6 +22,8 @@ class ForgotPasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
 
+        wrapper = findViewById(R.id.wrapper)
+        loading = findViewById(R.id.loading)
         edtEmail = findViewById(R.id.edtEmail)
         btnForgotPassword = findViewById(R.id.btnForgotPassword)
         txtLogin = findViewById(R.id.txtLogin)
@@ -33,26 +36,39 @@ class ForgotPasswordActivity : AppCompatActivity() {
         val email = edtEmail.text.toString().trim()
 
         if (email.isEmpty()) {
-            edtEmail.error = "Email Harus Diisi"
+            edtEmail.error = resources.getString(R.string.email_required)
             return
         }
         if(!RegexHelper().isValidEmail(email)){
-            edtEmail.error = "Email Tidak Valid"
+            edtEmail.error = resources.getString(R.string.email_not_valid)
             return
         }
 
         // do forgot password
-        firebaseAuth.sendPasswordResetEmail(email)
+        showLoading()
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
             .addOnCompleteListener { task ->
+                hideLoading()
                 if (task.isSuccessful) {
-                    toast("Email Telah Dikirim")
+                    edtEmail.text = null
+                    toast(resources.getString(R.string.check_your_mail))
                 }else{
-                    toast("Gagal Mengirim Email")
+                    toast(resources.getString(R.string.request_failed))
                 }
             }
     }
     private fun goToLogin(){
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun showLoading(){
+        loading.visibility = View.VISIBLE
+        wrapper.visibility = View.GONE
+    }
+
+    private fun hideLoading(){
+        loading.visibility = View.GONE
+        wrapper.visibility = View.VISIBLE
     }
 }
