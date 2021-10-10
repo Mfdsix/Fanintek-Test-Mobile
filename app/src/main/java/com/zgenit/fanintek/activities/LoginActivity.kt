@@ -1,21 +1,19 @@
 package com.zgenit.fanintek.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import com.google.firebase.auth.FirebaseUser
+import android.view.View
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.zgenit.fanintek.R
 import com.zgenit.fanintek.utils.Extensions.toast
-import com.zgenit.fanintek.utils.FirebaseHelper.firebaseAuth
-import com.zgenit.fanintek.utils.FirebaseHelper.firebaseUser
 import com.zgenit.fanintek.utils.RegexHelper
-import kotlin.math.sign
 
 class LoginActivity : AppCompatActivity() {
 
+    private lateinit var wrapper: ScrollView
+    private lateinit var loading: RelativeLayout
     private lateinit var edtEmail: EditText
     private lateinit var edtPassword: EditText
     private lateinit var btnLogin: Button
@@ -26,6 +24,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        wrapper = findViewById(R.id.wrapper)
+        loading = findViewById(R.id.loading)
         edtEmail = findViewById(R.id.edtEmail)
         edtPassword = findViewById(R.id.edtPassword)
         btnLogin = findViewById(R.id.btnLogin)
@@ -43,34 +43,34 @@ class LoginActivity : AppCompatActivity() {
 
         // input validations
         if (email.isEmpty()) {
-            edtEmail.error = "Email Harus Diisi"
+            edtEmail.error = resources.getString(R.string.email_required)
             return
         }
         if(!RegexHelper().isValidEmail(email)){
-            edtEmail.error = "Email Tidak Valid"
+            edtEmail.error = resources.getString(R.string.email_not_valid)
             return
         }
         if(password.isEmpty()){
-            edtPassword.error = "Password Harus Diisi"
+            edtPassword.error = resources.getString(R.string.password_required)
             return
         }
 
     // do login
-        firebaseAuth.signInWithEmailAndPassword(email, password)
+        showLoading()
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { signIn ->
                 if (signIn.isSuccessful) {
-                    if(firebaseUser?.isEmailVerified != true) {
-                        toast("Email Belum Terverifikasi")
+                    println(signIn.result)
+                    hideLoading()
+                    if(FirebaseAuth.getInstance().currentUser?.isEmailVerified != true) {
+                        toast(resources.getString(R.string.email_unverified))
                     }else{
-                        toast("Login Berhasil")
-//                    println(firebaseUser?.displayName)
-//                    println(firebaseUser?.email)
-//                    println(firebaseUser?.isEmailVerified)
                         startActivity(Intent(this, MainActivity::class.java))
                         finish()
                     }
                 } else {
-                    toast("Login Gagal")
+                    hideLoading()
+                    toast(resources.getString(R.string.login_failed))
                 }
             }
     }
@@ -85,11 +85,21 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun showLoading(){
+        loading.visibility = View.VISIBLE
+        wrapper.visibility = View.GONE
+    }
+
+    private fun hideLoading(){
+        loading.visibility = View.GONE
+        wrapper.visibility = View.VISIBLE
+    }
+
     override fun onStart() {
         super.onStart()
-        firebaseUser?.isEmailVerified?.let {
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        if(firebaseUser != null && firebaseUser.isEmailVerified){
             startActivity(Intent(this, MainActivity::class.java))
-            toast("welcome back")
         }
     }
 }
